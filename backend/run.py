@@ -1,18 +1,43 @@
-from backend.services.chat.chat import run_chatbot
-from backend.utils.cache_cleaner import clean_pycache
-
-# Load environment variables
-from backend.config.config import set_env_variables
-set_env_variables()
-
-# Load the LLM
-from backend.services.llm_connector.llm_connector import load_llm
-llm = load_llm()
-
+"""
+Run script for the AI Chatbot FastAPI application
+"""
+import traceback
 
 if __name__ == "__main__":
-    clean_pycache()
-
-    run_chatbot()    
-
-    clean_pycache()
+    try:
+        from backend.utils.clean_cache import clean_pycache
+        import uvicorn
+    except ImportError as e:
+        print(f"❌ [run.py] Import error: {str(e)}")
+        traceback.print_exc()
+        raise
+    
+    try:
+        # Clean cache before starting
+        print("🔧 [run.py] Cleaning cache...")
+        clean_pycache()
+    except Exception as e:
+        print(f"❌ [run.py] Error cleaning cache: {str(e)}")
+        traceback.print_exc()
+        # Don't raise, continue anyway
+    
+    try:
+        print("🚀 Starting AI Chatbot API...")
+        print("📚 API Documentation: http://127.0.0.1:8000/docs")
+        print("❤️  Health Check: http://127.0.0.1:8000/health")
+        print()
+    except Exception as e:
+        print(f"❌ [run.py] Error printing startup messages: {str(e)}")
+        traceback.print_exc()
+    
+    try:
+        uvicorn.run(
+            "backend.app:app",
+            host="127.0.0.1",
+            port=8000,
+            reload=True  # Auto-reload on code changes
+        )
+    except Exception as e:
+        print(f"❌ [run.py] Error starting uvicorn server: {str(e)}")
+        traceback.print_exc()
+        raise

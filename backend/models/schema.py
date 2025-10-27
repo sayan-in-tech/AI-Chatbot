@@ -1,10 +1,21 @@
 from typing_extensions import TypedDict
-from typing import Annotated
-from langgraph.graph import add_messages
+from typing import List, Dict, Any
 
 class State(TypedDict):
-    messages: Annotated[list, add_messages]
-    memory: list
-    sql_needed_or_not: bool = False
-    sql_query: str = ""
-    sql_output: str = ""
+    """State for chat flow"""
+    chat_response: List[Dict[str, Any]]
+    role: str
+    message: str
+    history: List[Dict[str, Any]]
+
+class Message(TypedDict):
+    role: str
+    content: str
+
+class History(TypedDict):
+    """Chat history"""
+    messages: List[Message]
+
+class ChatResponse(TypedDict):
+    """Chat response"""
+    messages: List[Message]
