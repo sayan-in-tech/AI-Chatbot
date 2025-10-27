@@ -1,0 +1,7 @@
+Project that would demonstrate your all or most of your technical skills from AI, cloud, backend and minimal frontend too.
+
+Theme would be to build a chatbot application with streaming response where token by token is displayed for response rather than showing whole LLM response at once. 
+
+Use a tool calling for llm, use Gemini. 
+
+Tool will have a web search capability with Grounding with Google Search using Gemini.
