@@ -10,7 +10,7 @@ export function PersonaSelect() {
       aria-label="Persona"
       value={current.id}
       onChange={(e) => setPersona(e.target.value as any)}
-      className="px-3 py-2 rounded-xl bg-neutral-800/70 border border-neutral-600 text-sm text-white focus:outline-none focus:border-neutral-400"
+      className="select-glass text-sm"
     >
       {personas.map((p) => (
         <option key={p.id} value={p.id}>
