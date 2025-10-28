@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: ai-chatbot-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m backend.run
+    plan: free
+    autoDeploy: false
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9
+    healthCheckPath: /health
+
+  - type: web
+    name: ai-chatbot-frontend
+    env: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/dist
+    plan: free
+    autoDeploy: false
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          name: ai-chatbot-backend
+          type: web
+          property: url
+

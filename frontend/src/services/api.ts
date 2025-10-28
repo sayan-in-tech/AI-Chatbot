@@ -4,6 +4,8 @@ export interface ChatRequestPayload {
   role: string; // 'general' | 'doctor' | 'programmer'
 }
 
+export type Connectivity = 'online' | 'offline';
+
 export async function chatRequest(payload: ChatRequestPayload): Promise<string> {
   const base = (import.meta.env.VITE_API_BASE_URL as string) || 'http://127.0.0.1:8000';
   const res = await fetch(`${base}/api/v1/chat/stream`, {
@@ -100,6 +102,25 @@ export async function chatRequestStream(
   if (buffer.trim()) {
     // console.debug('[stream:flush]', buffer.trim());
     onChunk(buffer.trim());
+  }
+}
+
+export async function checkBackendConnectivity(timeoutMs = 3000): Promise<Connectivity> {
+  const base = (import.meta.env.VITE_API_BASE_URL as string) || 'http://127.0.0.1:8000';
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${base}/`, {
+      method: 'GET',
+      signal: controller.signal,
+      headers: { 'Accept': 'application/json' },
+      cache: 'no-store',
+    });
+    clearTimeout(timer);
+    return res.ok ? 'online' : 'offline';
+  } catch {
+    clearTimeout(timer);
+    return 'offline';
   }
 }
 
