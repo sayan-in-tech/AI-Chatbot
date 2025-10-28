@@ -107,3 +107,35 @@ python test_api.py
 - Python 3.9+
 - Google API key
 - See `requirements.txt` for all dependencies
+
+## Deploy to Render (Free)
+
+You can deploy both the backend (FastAPI) and the frontend (Vite static site) to Render using the included `render.yaml`.
+
+### One‑click steps
+
+1. Push this repo to your own GitHub.
+2. In Render, click New + → Blueprint → connect your repo.
+3. Render detects `render.yaml` and proposes two services:
+   - `ai-chatbot-backend` (Python web service, free plan)
+   - `ai-chatbot-frontend` (Static site, free plan)
+4. Create the Blueprint. After creation:
+   - Open the backend service → Environment → add `GOOGLE_API_KEY` (from Google Makersuite).
+   - Set `GEMINI_MODEL` to your desired model (e.g., `gemini-1.5-flash` or `gemini-1.5-pro`).
+   - `PYTHON_VERSION` is pinned to 3.11.9.
+5. Deploy. The frontend’s `VITE_API_BASE_URL` is auto-wired to the backend URL via the blueprint.
+
+### Environment variables
+
+- Backend
+  - `GOOGLE_API_KEY` (required): obtain from `https://makersuite.google.com/app/apikey`.
+  - `GEMINI_MODEL` (required): e.g. `gemini-1.5-flash` or `gemini-1.5-pro`.
+  - `PYTHON_VERSION` (optional): defaults to 3.11.9 in `render.yaml`.
+- Frontend
+  - `VITE_API_BASE_URL` is injected from the backend service URL by `render.yaml`.
+
+### Notes on free tier
+
+- Instances spin down when idle and cold start may add a few seconds.
+- SSE streaming is supported; the UI falls back gracefully if JSON is returned.
+- Health check path for backend is `/health` (configured in `render.yaml`).
