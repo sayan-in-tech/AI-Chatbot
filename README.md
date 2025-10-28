@@ -24,7 +24,7 @@ Create a `.env` file in the project root (both required):
 
 ```env
 GOOGLE_API_KEY=your-google-api-key-here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=your-model-name
 ```
 
 Get a Google API key from: https://makersuite.google.com/app/apikey
