@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Message, Persona } from '../types';
 import { personas } from '../config/personas';
-import { chatRequest } from '../services/api';
+import { chatRequest, chatRequestStream } from '../services/api';
 
 interface ChatState {
   messages: Message[];
@@ -60,13 +60,27 @@ export const useChatStore = create<ChatState>((set, get) => ({
     try {
       const { persona } = get();
       const sessionId = getOrCreateSessionId();
-      const reply = await chatRequest({
-        message: text.trim(),
-        session_id: sessionId,
-        role: persona.id,
-      });
-      const assistantMessage = createMessage('assistant', reply);
-      set((s) => ({ messages: [...s.messages, assistantMessage] }));
+      // prepare an empty assistant message and stream into it
+      const assistantId = `${Date.now()}-assistant-${Math.random()
+        .toString(36)
+        .slice(2, 8)}`;
+      set((s) => ({
+        messages: [
+          ...s.messages,
+          { id: assistantId, role: 'assistant', content: '', createdAt: Date.now() },
+        ],
+      }));
+
+      await chatRequestStream(
+        { message: text.trim(), session_id: sessionId, role: persona.id },
+        (chunk) => {
+          set((s) => ({
+            messages: s.messages.map((m) =>
+              m.id === assistantId ? { ...m, content: m.content + chunk } : m
+            ),
+          }));
+        }
+      );
     } finally {
       set({ isLoading: false });
     }

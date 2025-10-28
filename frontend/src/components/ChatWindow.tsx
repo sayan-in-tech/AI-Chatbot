@@ -9,7 +9,7 @@ export function ChatWindow() {
 
   useEffect(() => {
     ref.current?.scrollTo({ top: ref.current.scrollHeight, behavior: 'smooth' });
-  }, [messages.length, isLoading]);
+  }, [messages, isLoading]);
 
   return (
     <div ref={ref} className="max-h-[65vh] overflow-y-auto pr-2">
