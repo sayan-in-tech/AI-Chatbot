@@ -12,6 +12,38 @@ A sophisticated chatbot backend with streaming responses, conversation memory, a
 
 ## Quick Start
 
+### 0. One-command start (recommended)
+
+Use the provided entry scripts to set up and run both backend and frontend.
+
+- Windows (PowerShell):
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+./start.ps1
+```
+
+- macOS/Linux:
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+What the scripts do:
+- Create/activate `.venv` if missing
+- Install Python deps from `requirements.txt`
+- Run `npm install` in `frontend` if needed
+- Start backend (`python -m backend.run`) and frontend (`npm run dev`) in separate terminals
+
+Prerequisites:
+- Python 3.9+
+- Node.js and npm
+- `.env` with `GOOGLE_API_KEY` and `GEMINI_MODEL`
+
+Troubleshooting:
+- PowerShell script blocked → run `Set-ExecutionPolicy Bypass -Scope Process -Force`
+- `start.sh` not executable → `chmod +x start.sh`
+- Port conflicts → stop existing processes using ports 8000/5173
+
 ### 1. Install Dependencies
 
 ```bash
