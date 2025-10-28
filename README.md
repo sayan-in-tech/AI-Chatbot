@@ -1,6 +1,32 @@
-# AI Chatbot - FastAPI Backend
+# AI Chatbot
 
 A sophisticated chatbot backend with streaming responses, conversation memory, and Google Search grounding.
+
+## 📺 Demo Video
+
+Watch the demo video to see the AI Chatbot in action:
+
+[![AI Chatbot Demo](https://img.youtube.com/vi/L_0ikssVZBI/0.jpg)](https://www.youtube.com/watch?v=L_0ikssVZBI)
+
+[Watch on YouTube](https://www.youtube.com/watch?v=L_0ikssVZBI)
+
+## 🖼️ Screenshots
+
+### General Chat
+
+![General Chat](./assets/image_gen.png)
+
+### Doctor Mode
+
+![Doctor Mode](./assets/image_doc.png)
+
+### Programmer Mode
+
+![Programmer Mode](./assets/image_pro.png)
+
+### API Documentation
+
+![API Documentation](./assets/image_api.png)
 
 ## Features
 
@@ -11,6 +37,38 @@ A sophisticated chatbot backend with streaming responses, conversation memory, a
 - **REST API**: FastAPI with automatic OpenAPI documentation
 
 ## Quick Start
+
+### 0. One-command start (recommended)
+
+Use the provided entry scripts to set up and run both backend and frontend.
+
+- Windows (PowerShell):
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+./start.ps1
+```
+
+- macOS/Linux:
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+What the scripts do:
+- Create/activate `.venv` if missing
+- Install Python deps from `requirements.txt`
+- Run `npm install` in `frontend` if needed
+- Start backend (`python -m backend.run`) from the project folder and frontend (`npm run dev`) from the frontend folder in separate terminals
+
+Prerequisites:
+- Python 3.9+
+- Node.js and npm
+- `.env` with `GOOGLE_API_KEY` and `GEMINI_MODEL`
+
+Troubleshooting:
+- PowerShell script blocked → run `Set-ExecutionPolicy Bypass -Scope Process -Force`
+- `start.sh` not executable → `chmod +x start.sh`
+- Port conflicts → stop existing processes using ports 8000/5173
 
 ### 1. Install Dependencies
 
@@ -26,8 +84,6 @@ Create a `.env` file in the project root (both required):
 GOOGLE_API_KEY=your-google-api-key-here
 GEMINI_MODEL=your-model-name
 ```
-
-Get a Google API key from: https://makersuite.google.com/app/apikey
 
 ### 3. Run the Server
 
@@ -49,93 +105,8 @@ The API will be available at: `http://127.0.0.1:8000`
 3. `GET /api/v1/history/{session_id}` - Get chat history
 4. `POST /api/v1/history/clear` - Clear chat history
 
-## Usage Example
-
-### Streaming Chat
-
-```python
-import requests
-
-response = requests.post(
-    "http://127.0.0.1:8000/api/v1/chat/stream",
-    json={
-        "message": "Hello!",
-        "session_id": "my-session",
-        "role": "general"
-    },
-    stream=True
-)
-
-for line in response.iter_lines():
-    if line:
-        print(line.decode('utf-8'))
-```
-
-### Get Chat History
-
-```python
-import requests
-
-response = requests.get("http://127.0.0.1:8000/api/v1/history/my-session")
-print(response.json())
-```
-
-## Project Structure
-
-```
-backend/
-├── app.py                      # FastAPI app entry point
-├── routes/routes.py           # API endpoints
-├── services/
-│   ├── chat/chat.py           # Chat logic with streaming
-│   ├── llm_connector/         # Gemini client
-│   └── memory/memory.py       # Conversation memory
-├── models/schema.py           # Pydantic models
-└── prompts/prompts.py         # System prompts
-```
-
-## Testing
-
-Run the test script:
-
-```bash
-python test_api.py
-```
-
-## Requirements
-
-- Python 3.9+
-- Google API key
-- See `requirements.txt` for all dependencies
-
-## Deploy to Render (Free)
-
-You can deploy both the backend (FastAPI) and the frontend (Vite static site) to Render using the included `render.yaml`.
-
-### One‑click steps
-
-1. Push this repo to your own GitHub.
-2. In Render, click New + → Blueprint → connect your repo.
-3. Render detects `render.yaml` and proposes two services:
-   - `ai-chatbot-backend` (Python web service, free plan)
-   - `ai-chatbot-frontend` (Static site, free plan)
-4. Create the Blueprint. After creation:
-   - Open the backend service → Environment → add `GOOGLE_API_KEY` (from Google Makersuite).
-   - Set `GEMINI_MODEL` to your desired model (e.g., `gemini-1.5-flash` or `gemini-1.5-pro`).
-   - `PYTHON_VERSION` is pinned to 3.11.9.
-5. Deploy. The frontend’s `VITE_API_BASE_URL` is injected at build time from the backend host. No manual frontend env var is required.
-
 ### Environment variables
 
 - Backend
   - `GOOGLE_API_KEY` (required): obtain from `https://makersuite.google.com/app/apikey`.
   - `GEMINI_MODEL` (required): e.g. `gemini-1.5-flash` or `gemini-1.5-pro`.
-  - `PYTHON_VERSION` (optional): defaults to 3.11.9 in `render.yaml`.
-- Frontend
-  - `VITE_API_BASE_URL` is injected from the backend service URL by `render.yaml`.
-
-### Notes on free tier
-
-- Instances spin down when idle and cold start may add a few seconds.
-- SSE streaming is supported; the UI falls back gracefully if JSON is returned.
-- Health check path for backend is `/health` (configured in `render.yaml`).
