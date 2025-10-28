@@ -6,9 +6,12 @@ export default {
     extend: {
       colors: {
         accent: {
-          DEFAULT: '#22d3ee',
-          500: '#22d3ee',
+          DEFAULT: '#f59e0b',
+          500: '#f59e0b',
         },
+        brandYellow: '#fbbf24',
+        brandOrange: '#f59e0b',
+        brandGray: '#9ca3af',
       },
       boxShadow: {
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',

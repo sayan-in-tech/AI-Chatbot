@@ -23,7 +23,7 @@ export function MessageInput() {
       />
       <button
         disabled={isLoading || !text.trim()}
-        className="px-4 py-2 rounded-xl bg-accent/90 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed text-black text-sm font-medium"
+        className="px-4 py-2 rounded-xl btn-glass disabled:opacity-50 disabled:cursor-not-allowed text-black text-sm font-medium"
       >
         Send
       </button>
