@@ -9,28 +9,28 @@ CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-echo -e "${CYAN}🚀 AI Chatbot Startup Script${NC}"
+echo -e "${CYAN}AI Chatbot Startup Script${NC}"
 echo -e "${CYAN}============================${NC}"
 echo ""
 
 # Step 1: Check and create virtual environment
-echo -e "${YELLOW}📦 Step 1: Checking virtual environment...${NC}"
+echo -e "${YELLOW}Step 1: Checking virtual environment...${NC}"
 if [ ! -d ".venv" ]; then
     echo "Creating virtual environment..."
     python3 -m venv .venv
-    echo -e "${GREEN}✓ Virtual environment created${NC}"
+    echo -e "${GREEN}Virtual environment created${NC}"
 else
-    echo -e "${GREEN}✓ Virtual environment already exists${NC}"
+    echo -e "${GREEN}Virtual environment already exists${NC}"
 fi
 
 # Step 2: Activate virtual environment
 echo ""
-echo -e "${YELLOW}🔌 Step 2: Activating virtual environment...${NC}"
+echo -e "${YELLOW}Step 2: Activating virtual environment...${NC}"
 source .venv/bin/activate
 
 # Step 3: Check if requirements are installed
 echo ""
-echo -e "${YELLOW}📋 Step 3: Checking Python dependencies...${NC}"
+echo -e "${YELLOW}Step 3: Checking Python dependencies...${NC}"
 
 # Check if key packages are installed
 python3 -c "import fastapi, uvicorn" 2>/dev/null
@@ -38,30 +38,30 @@ if [ $? -ne 0 ]; then
     echo "Installing requirements..."
     pip install --upgrade pip
     pip install -r requirements.txt
-    echo -e "${GREEN}✓ Requirements installed${NC}"
+    echo -e "${GREEN}Requirements installed${NC}"
 else
-    echo -e "${GREEN}✓ Requirements already installed${NC}"
+    echo -e "${GREEN}Requirements already installed${NC}"
 fi
 
 # Step 4: Check if npm dependencies are installed
 echo ""
-echo -e "${YELLOW}📦 Step 4: Checking npm dependencies...${NC}"
+echo -e "${YELLOW}Step 4: Checking npm dependencies...${NC}"
 
 cd frontend
 
 if [ ! -d "node_modules" ]; then
     echo "Installing npm dependencies..."
     npm install
-    echo -e "${GREEN}✓ npm dependencies installed${NC}"
+    echo -e "${GREEN}npm dependencies installed${NC}"
 else
-    echo -e "${GREEN}✓ npm dependencies already installed${NC}"
+    echo -e "${GREEN}npm dependencies already installed${NC}"
 fi
 
 cd ..
 
 # Step 5 & 6: Start backend and frontend
 echo ""
-echo -e "${YELLOW}🎯 Step 5: Starting servers...${NC}"
+echo -e "${YELLOW}Step 5: Starting servers...${NC}"
 echo ""
 
 # Start backend in background
@@ -87,9 +87,9 @@ xterm -e "npm run dev; exec bash" 2>/dev/null || \
 cd ..
 
 echo ""
-echo -e "${GREEN}✓ Backend running at: http://127.0.0.1:8000${NC}"
-echo -e "${GREEN}✓ Frontend running at: http://localhost:5173${NC}"
-echo -e "${GREEN}✓ API Documentation: http://127.0.0.1:8000/docs${NC}"
+echo -e "${GREEN}Backend running at: http://127.0.0.1:8000${NC}"
+echo -e "${GREEN}Frontend running at: http://localhost:5173${NC}"
+echo -e "${GREEN}API Documentation: http://127.0.0.1:8000/docs${NC}"
 echo ""
 echo -e "${MAGENTA}Both servers are running in separate terminal windows.${NC}"
 echo -e "${MAGENTA}Close those windows to stop the servers.${NC}"
