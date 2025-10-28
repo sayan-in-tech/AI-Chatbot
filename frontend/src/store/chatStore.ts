@@ -69,10 +69,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
         if (!text) return;
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(12);
-        const lines = doc.splitTextToSize(text, maxWidth * 0.7);
+        const lines = doc.splitTextToSize(text, maxWidth * 0.7) as string[];
         const blockWidth = doc.getTextWidth(lines.join(' '));
         const x = align === 'right' ? pageWidth - margin - Math.min(blockWidth, maxWidth * 0.7) : margin;
-        lines.forEach((ln) => {
+        lines.forEach((ln: string) => {
           if (y + lineHeight > doc.internal.pageSize.getHeight() - margin) {
             doc.addPage();
             y = margin;
