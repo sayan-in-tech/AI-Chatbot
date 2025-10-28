@@ -58,10 +58,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((s) => ({ messages: [...s.messages, userMessage], isLoading: true }));
 
     try {
-      const { persona, messages } = get();
+      const { persona } = get();
+      const sessionId = getOrCreateSessionId();
       const reply = await chatRequest({
-        system: persona.system,
-        messages,
+        message: text.trim(),
+        session_id: sessionId,
+        role: persona.id,
       });
       const assistantMessage = createMessage('assistant', reply);
       set((s) => ({ messages: [...s.messages, assistantMessage] }));
@@ -70,5 +72,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
 }));
+
+function getOrCreateSessionId(): string {
+  const key = 'chat.session_id';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
 
 
