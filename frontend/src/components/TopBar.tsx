@@ -14,7 +14,15 @@ export function TopBar() {
         </span>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
-        <PersonaSelect />
+        <div className="select-wrap">
+          <div className="select-label">Persona</div>
+          <div className="select-box">
+            <PersonaSelect />
+            <svg className="select-chevron" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </div>
+        </div>
         <button
           onClick={exportChatJSON}
           className="px-3 py-2 rounded-xl btn-glass transition-colors text-sm"

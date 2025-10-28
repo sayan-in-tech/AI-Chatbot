@@ -175,4 +175,23 @@ input, textarea { caret-color: #f59e0b; }
   color: #fff;
 }
 
+/* Select wrapper with chevron and label */
+.select-wrap { display: inline-flex; align-items: center; gap: .5rem; }
+.select-box { position: relative; display: inline-block; }
+.select-chevron {
+  position: absolute;
+  right: .65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  pointer-events: none;
+  color: #f59e0b;
+  opacity: .9;
+}
+.select-label{
+  font-size: .75rem;
+  color: rgba(255,255,255,0.65);
+  margin-left: .15rem;
+}
+
 
