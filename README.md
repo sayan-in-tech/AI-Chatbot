@@ -20,11 +20,11 @@ pip install -r requirements.txt
 
 ### 2. Set Up API Key
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root (both required):
 
 ```env
 GOOGLE_API_KEY=your-google-api-key-here
-MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 Get a Google API key from: https://makersuite.google.com/app/apikey

@@ -12,7 +12,7 @@ def check_environment() -> Dict[str, Any]:
     """Check required environment configuration."""
     try:
         google_api_key = os.getenv("GOOGLE_API_KEY")
-        model = os.getenv("MODEL", "gemini-2.0-flash-exp")
+        model = os.environ.get("GEMINI_MODEL")
         status = "healthy" if google_api_key else "degraded"
         result = {
             "status": status,
@@ -24,6 +24,8 @@ def check_environment() -> Dict[str, Any]:
         }
         if not google_api_key:
             result["error"] = "GOOGLE_API_KEY not set"
+        if not model:
+            result["model_error"] = "GEMINI_MODEL not set"
         return result
     except Exception as e:
         print(f"❌ [services/health/health.py:check_environment] {str(e)}")
@@ -66,7 +68,7 @@ def check_llm_service() -> Dict[str, Any]:
             "details": {
                 "client_loaded": client is not None,
                 "grounding_tool_created": tool is not None,
-                "model": os.getenv("MODEL", "gemini-2.0-flash-exp"),
+                "model": os.environ.get("GEMINI_MODEL"),
             },
         }
     except Exception as e:

@@ -103,14 +103,14 @@ async def chat_stream(message: str, session_id: str, role: str = "general") -> A
             traceback.print_exc()
             raise
         
-        # Get model
+        # Get model (required)
         try:
-            model_name = os.getenv("MODEL", "gemini-2.0-flash-exp")
-            print(f"✅ [services/chat/chat.py:chat_stream] Using model: {model_name}")
-        except Exception as e:
-            print(f"❌ [services/chat/chat.py:chat_stream] Error getting model name: {str(e)}")
-            traceback.print_exc()
-            model_name = "gemini-2.0-flash-exp"
+            model_name = os.environ["GEMINI_MODEL"]
+            print(f"✅ [services/chat/chat.py:chat_stream] Using model (GEMINI_MODEL): {model_name}")
+        except KeyError:
+            error_msg = "GEMINI_MODEL environment variable is required but not set"
+            print(f"❌ [services/chat/chat.py:chat_stream] {error_msg}")
+            raise ValueError(error_msg)
         
         try:
             # Stream response
