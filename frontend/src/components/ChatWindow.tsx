@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useChatStore } from '../store/chatStore';
 
 export function ChatWindow() {
@@ -19,16 +20,18 @@ export function ChatWindow() {
         {messages.map((m) => (
           <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`rounded-2xl px-4 py-2 max-w-[80%] border ${
+              className={`rounded-2xl px-4 py-2 max-w-[80%] border backdrop-blur-md ${
                 m.role === 'user'
-                  ? 'bg-white/15 border-white/20'
-                  : 'bg-white/8 border-white/15'
+                  ? 'bg-white/15 border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)]'
+                  : 'bg-white/10 border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.2)]'
               }`}
             >
               <div className="text-xs text-white/50 mb-1">
                 {m.role === 'user' ? 'You' : 'Assistant'}
               </div>
-              <div className="whitespace-pre-wrap text-sm leading-relaxed">{m.content}</div>
+              <div className="prose-invert markdown text-sm leading-relaxed">
+                <ReactMarkdown>{m.content}</ReactMarkdown>
+              </div>
             </div>
           </div>
         ))}

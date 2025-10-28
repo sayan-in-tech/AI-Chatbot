@@ -24,6 +24,8 @@ export function FluidCursor() {
     window.addEventListener('pointermove', onMove);
     window.addEventListener('resize', onResize);
 
+    let t = 0;
+
     const render = () => {
       // follow pointer with easing
       for (let i = 0; i < trail.length; i++) {
@@ -34,18 +36,24 @@ export function FluidCursor() {
       }
 
       ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = 'lighter';
       for (let i = 0; i < trail.length - 1; i++) {
         const p1 = trail[i];
         const p2 = trail[i + 1];
-        const alpha = 0.12 * (1 - i / trail.length);
-        ctx.strokeStyle = `rgba(34,211,238,${alpha})`;
+        const alpha = 0.14 * (1 - i / trail.length);
+        const hue = (t * 360 + i * 18) % 360; // animated rainbow
+        ctx.strokeStyle = `hsla(${hue}, 90%, 60%, ${alpha})`;
         ctx.lineWidth = Math.max(1, 10 - i * 0.5);
+        ctx.lineCap = 'round';
+        ctx.shadowColor = `hsla(${hue}, 90%, 60%, ${alpha})`;
+        ctx.shadowBlur = 12 * (1 - i / trail.length);
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       }
-
+      ctx.globalCompositeOperation = 'source-over';
+      t += 0.01;
       rafRef.current = requestAnimationFrame(render);
     };
     rafRef.current = requestAnimationFrame(render);
@@ -60,7 +68,8 @@ export function FluidCursor() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-10 mix-blend-screen"
+      id="fluid"
+      className="pointer-events-none fixed inset-0 z-0 mix-blend-screen"
     />
   );
 }
