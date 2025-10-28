@@ -4,7 +4,7 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: python -m backend.run
-    plan: free
+    
     autoDeploy: false
     envVars:
       - key: GOOGLE_API_KEY
@@ -18,14 +18,16 @@ services:
   - type: web
     name: ai-chatbot-frontend
     env: static
-    buildCommand: cd frontend && npm ci && npm run build
+    buildCommand: |
+      BACKEND_HOST=$(echo $BACKEND_HOST)
+      cd frontend && npm ci && VITE_API_BASE_URL="https://$BACKEND_HOST" npm run build
     staticPublishPath: frontend/dist
-    plan: free
+    
     autoDeploy: false
     envVars:
-      - key: VITE_API_BASE_URL
+      - key: BACKEND_HOST
         fromService:
           name: ai-chatbot-backend
           type: web
-          property: url
+          property: host
 

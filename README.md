@@ -123,7 +123,7 @@ You can deploy both the backend (FastAPI) and the frontend (Vite static site) to
    - Open the backend service → Environment → add `GOOGLE_API_KEY` (from Google Makersuite).
    - Set `GEMINI_MODEL` to your desired model (e.g., `gemini-1.5-flash` or `gemini-1.5-pro`).
    - `PYTHON_VERSION` is pinned to 3.11.9.
-5. Deploy. The frontend’s `VITE_API_BASE_URL` is auto-wired to the backend URL via the blueprint.
+5. Deploy. The frontend’s `VITE_API_BASE_URL` is injected at build time from the backend host. No manual frontend env var is required.
 
 ### Environment variables
 
