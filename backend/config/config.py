@@ -30,13 +30,7 @@ def set_env_variables():
                 print(f"❌ [config/config.py:set_env_variables] Error reading .env file: {str(e)}")
                 traceback.print_exc()
         
-        # Set default values if not already set
-        try:
-            if "MODEL" not in os.environ:
-                os.environ["MODEL"] = "gemini-2.0-flash-exp"
-        except Exception as e:
-            print(f"❌ [config/config.py:set_env_variables] Error setting MODEL env var: {str(e)}")
-            traceback.print_exc()
+        # No defaults for GEMINI_MODEL; it must be provided by the environment
         
         # Check if GOOGLE_API_KEY is set
         if not os.getenv("GOOGLE_API_KEY"):

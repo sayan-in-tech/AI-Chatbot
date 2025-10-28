@@ -87,5 +87,14 @@ class MemoryStore:
             traceback.print_exc()
             return []
 
+    def get_all_histories(self) -> Dict[str, List[Message]]:
+        """Return a shallow copy of all session histories"""
+        try:
+            return {sid: list(messages) for sid, messages in self._sessions.items()}
+        except Exception as e:
+            print(f"❌ [services/memory/memory.py:get_all_histories] Error getting all histories: {str(e)}")
+            traceback.print_exc()
+            return {}
+
 # Global memory store instance
 memory_store = MemoryStore()
