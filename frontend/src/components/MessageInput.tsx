@@ -14,12 +14,21 @@ export function MessageInput() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="glass rounded-2xl p-2 flex items-center gap-2">
+    <form onSubmit={onSubmit} autoComplete="off" className="glass rounded-2xl p-2 flex items-center gap-2">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type your message..."
         className="flex-1 bg-transparent outline-none px-3 py-2 text-sm"
+        type="text"
+        name="chat-message"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="none"
+        spellCheck={false}
+        data-lpignore="true"
+        data-1p-ignore
+        data-form-type="other"
       />
       <button
         disabled={isLoading || !text.trim()}

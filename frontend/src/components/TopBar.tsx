@@ -9,7 +9,7 @@ export function TopBar() {
     <div className="glass rounded-2xl p-3 md:p-4 flex items-center justify-between card-glass">
       <div className="flex items-center gap-3">
         <div className="h-3 w-3 rounded-full bg-accent shadow-[0_0_18px_2px_rgba(245,158,11,0.7)]" />
-        <span className="text-sm md:text-base font-medium text-white/90">
+        <span className="text-lg md:text-2xl font-semibold text-white/90">
           AI Chatbot
         </span>
       </div>
