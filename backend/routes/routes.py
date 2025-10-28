@@ -1,4 +1,5 @@
 import traceback
+import asyncio
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.responses import Response
@@ -59,12 +60,15 @@ async def chat_stream_endpoint(request: ChatRequest):
                 async for chunk in chat_stream(request.message, request.session_id, request.role):
                     try:
                         yield f"data: {chunk}\n\n"
+                        # yield control to event loop to flush
+                        await asyncio.sleep(0)
                     except Exception as e:
                         print(f"❌ [routes/routes.py:chat_stream_endpoint:generate] Error yielding chunk: {str(e)}")
                         traceback.print_exc()
                         yield f"data: [ERROR] {str(e)}\n\n"
                         break
                 yield "data: [DONE]\n\n"
+                await asyncio.sleep(0)
                 print(f"✅ [routes/routes.py:chat_stream_endpoint:generate] Stream completed successfully")
             except Exception as e:
                 print(f"❌ [routes/routes.py:chat_stream_endpoint:generate] Error in generate: {str(e)}")
@@ -75,7 +79,7 @@ async def chat_stream_endpoint(request: ChatRequest):
             generate(),
             media_type="text/event-stream",
             headers={
-                "Cache-Control": "no-cache",
+                "Cache-Control": "no-cache, no-transform",
                 "Connection": "keep-alive",
                 "X-Accel-Buffering": "no",
             }

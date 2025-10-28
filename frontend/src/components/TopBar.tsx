@@ -4,6 +4,7 @@ import { useChatStore } from '../store/chatStore';
 export function TopBar() {
   const exportChatJSON = useChatStore((s) => s.exportChatJSON);
   const clearChat = useChatStore((s) => s.clearChat);
+  const exportChatPDF = useChatStore((s) => s.exportChatPDF);
 
   return (
     <div className="glass rounded-2xl p-3 md:p-4 flex items-center justify-between card-glass">
@@ -24,10 +25,10 @@ export function TopBar() {
           </div>
         </div>
         <button
-          onClick={exportChatJSON}
+          onClick={exportChatPDF}
           className="px-3 py-2 rounded-xl btn-glass transition-colors text-sm"
         >
-          Export JSON
+          Export PDF
         </button>
         <button
           onClick={clearChat}

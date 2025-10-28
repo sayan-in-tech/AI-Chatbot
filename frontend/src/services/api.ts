@@ -5,8 +5,8 @@ export interface ChatRequestPayload {
 }
 
 export async function chatRequest(payload: ChatRequestPayload): Promise<string> {
-  const base = import.meta.env.VITE_API_BASE_URL ?? '';
-  const res = await fetch(`${base}/api/v1/chat`, {
+  const base = (import.meta.env.VITE_API_BASE_URL as string) || 'http://127.0.0.1:8000';
+  const res = await fetch(`${base}/api/v1/chat/stream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -23,7 +23,7 @@ export async function chatRequestStream(
   payload: ChatRequestPayload,
   onChunk: (text: string) => void
 ): Promise<void> {
-  const base = import.meta.env.VITE_API_BASE_URL ?? '';
+  const base = (import.meta.env.VITE_API_BASE_URL as string) || 'http://127.0.0.1:8000';
   const res = await fetch(`${base}/api/v1/chat`, {
     method: 'POST',
     headers: {
@@ -36,6 +36,7 @@ export async function chatRequestStream(
 
   // If server sent JSON, fall back to non-stream
   const contentType = res.headers.get('content-type') || '';
+  const isSSE = contentType.includes('text/event-stream');
   if (contentType.includes('application/json')) {
     const data = await res.json();
     const full = String(data?.response || '');
@@ -60,7 +61,13 @@ export async function chatRequestStream(
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    buffer += decoder.decode(value, { stream: true });
+    const decoded = decoder.decode(value, { stream: true });
+    if (!isSSE) {
+      // raw text/chunked – emit immediately
+      if (decoded) onChunk(decoded);
+      continue;
+    }
+    buffer += decoded;
 
     // Try to parse SSE lines; keep incomplete line in buffer
     let lastNewline = buffer.lastIndexOf('\n');
